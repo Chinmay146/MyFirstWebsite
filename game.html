@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animated Voice Recognition</title>
+    <style>
+        #startButton {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #output {
+            font-size: 24px;
+            margin-top: 20px;
+            animation: fade-in 0.5s;
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Animated Voice Recognition</h1>
+    <p>Click the button and start speaking.</p>
+    <button id="startButton">Start Recognition</button>
+    <p id="output">Recognition output will appear here.</p>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const output = document.getElementById('output');
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.continuous = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function(event) {
+            const result = event.results[event.results.length - 1][0].transcript;
+            output.textContent = result;
+        };
+
+        startButton.addEventListener('click', function() {
+            recognition.start();
+            output.textContent = 'Listening...';
+            output.style.animation = 'none'; // Remove the fade-in animation
+        });
+
+        recognition.onend = function() {
+            output.textContent = 'Speech recognition ended.';
+            output.style.animation = 'fade-in 0.5s'; // Add the fade-in animation back
+        };
+    </script>
+</body>
+</html>
+
